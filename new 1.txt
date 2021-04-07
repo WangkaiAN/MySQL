@@ -1,0 +1,141 @@
+create table exam_re(
+	id int,
+	name varchar(50),
+	chainese decimal(3,1),
+	english decimal(3,1),
+	math decimal(3,1)
+);
+
+insert into exam_re values
+(1,'ergou',69,80,99),
+(2,'liyang',89,75,60),
+(3,'dahuang',90,86,59),
+(4,'caixuk',50,80,46),
+(5,'xioabai',69,80,96),
+(6,'dahei',72,50,84);
+ select name from exam_re
+    order by chainese+math+english desc
+	limit 3;
+
+设计一张图书表，包含以下字段：图书名称，图书作者、图书价格、图书分类
+create table book(
+	Bname varchar(50),
+	Bauthor varchar(50),
+	Bprice decimal(5,2),
+	Bclassify varchar(30)
+);
+设计一张老师表，包含以下字段：姓名、年龄、身高、体重、性别、学历、生日、身份证号
+create table teacher(
+	name varchar(50),
+	age int,
+	height int,
+	weight decimal(4,2),
+	gender varchar(10),
+	education varchar(20),
+	birthday datetime,
+	ID varchar(50)
+);
+设计一张商品表，包含以下字段：商品名称、商品价格、商品库存、商品描述
+create table product(
+	Pname varchar(30),
+	price decimal(5,2),
+	inventory int,
+	description varchar(50)
+);
+
+insert into book values
+('shujujiegou','dashi',101,'it'),
+('javahexinjishu','tanglaoshi',104,'it');
+
+update book set Bprice=61 where Bname='javahexinjishu';
+
+insert into book values('javahexinjishu','Cay S. Horstman',56.43,'jishuanjijishu');
+
+create table goods(
+	id int,
+	name varchar(50),
+	price decimal(5,2),
+	number int
+);
+insert into goods values
+(101,'book',69.9,100),
+(102,'dog',59.8,201),
+(103,'cat',200,10);
+insert into product values('xueshengshubao',18.91,101,null);
+
+create table user(
+	ID int,
+	name varchar(50),
+	account int,
+	amount decimal(10,2)
+);
+insert into user values
+(101,'mayun',12345,1000000),
+(102,'erdan',23456,999),
+(103,'xioabai',34567,1001);
+
+SELECT a FROM A 
+WHERE a BETWEEN 1 AND 50 OR (a IN (25,70,95) AND a BETWEEN 25 AND 75) 
+
+select * from user
+where account is not null
+and amount>1000
+and ID between 1 and 200 or ( ID between 300 and 500)
+;
+
+select * from user 
+where  ID between 1 and 200 or ( ID between 300 and 500)
+and account is not null;
+
+
+select * from user 
+where amount>1000
+and ID between 1 and 200 or ( ID between 300 and 500)
+and account is not null
+;
+
+create table book(
+	name varchar(50),
+	author varchar(50),
+	price decimal(5,2),
+	publish_date datetime
+);
+insert into book values
+('shujujiegou','dashi',58.9,'2021-11-11 00:00:01.000000'),
+('java','people',32.9,'2021-12-12 00:00:01.000000'),
+('python','guishu',58,'2014-10-10 00:00:01.000000');
+select * from book
+where author is not null
+and price>50
+and publish_date>'2019-12-31 00:00:01.000000';
+
+create table article(
+	title varchar(100),
+	creat_date datetime
+);
+insert into article values
+('python','2014-10-10 00:00:01.000000'),
+('java','2021-12-12 00:00:01.000000'),
+('hadoop','2021-11-11 00:00:01.000000');
+
+select * from article
+where title is not null
+and creat_date>'2019-01-01 00:00:01.000000'; 
+
+select * from article
+where  creat_date between '2019-01-01 01:30:00.000000' and '2019-11-10 16:02:00.000000'; 
+
+create table student (
+	id int,
+	name varchar(20),
+	age int
+);
+insert into student values
+(101,'zhangsan',19),
+(102,'zhangergou',26),
+(103,'zhangyouren',1000),
+(104,'liyang',23);
+
+select *  from student
+where age between 18 and 25
+and name like 'zhang%';
