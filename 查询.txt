@@ -1,0 +1,121 @@
+create table emp(
+	id int primary key auto_increment,
+	name varchar(20) not null,
+	
+);
+select student.id ,student.name,score.student_id,sum(score.score)
+from student,score
+where student.id = score.student_id
+group by student.id;
+
+设计一个学校食堂管理系统
+学校食堂管理系统，包含食堂表，食堂仓口表，仓口收费记录表
+create database canteen;
+
+create table canteen (
+	id int,
+	name varchar(20)
+);
+
+create table window(
+	id int,
+	canteen_id int,
+	name varchar(20)
+);
+
+create table toll(
+	window_id int,
+	foodname varchar(30),
+	toll decimal(3,1)
+);
+
+车辆违章系统，包含用户表，车辆表，违章信息表。违章信息表中包含用户和车辆的违章信息
+create database CarIllegal;
+
+create table user(
+	id int,
+	name varchar(20),
+	car_id varchar(20)
+);
+
+create table car(
+	car_id varchar(20),
+	brand varchar(20)
+);
+
+create table Illegal(
+	user_id int,
+	car_id varchar(20),
+	Information varchar(50)
+);
+学校宿舍管理系统，要求包含宿舍信息，学生信息，每日的宿舍查房记录。
+create database dormitory;
+use dormitory;
+create table dormitory(
+	id int
+);
+create table student(
+	id int,
+	name varchar(20),
+	dormitory_id int
+);
+create table log(
+	dormitory_id int,
+	number int
+);
+
+考勤系统，包含员工表，考勤记录表
+create database Attendance;
+use Attendance;
+create table employee(
+	id int,
+	name varchar(20)
+);
+create table AttendanceLog(
+	time datetime,
+	employee_id int,
+	come bit
+);
+
+
+
+有一张员工表emp，字段：姓名name，性别sex，部门depart，工资salary。查询以下数据：
+create table emp(
+	id int,
+	name varchar(20),
+	sex bit,
+	depart varchar(20),
+	salary decimal(6,1)
+	
+);
+insert into emp values
+(101,'xiaohong',0,'kaifa',10000),
+(102,'xiali',0,'ceshi',9000),
+(103,'xiaozhang',1,'yunwei',12000),
+(104,'xiaochen',1,'suanfa',22000);
+作业内容
+1、查询男女员工的平均工资
+select sex,avg(salary) from emp
+group by sex;
+2、查询各部门的总薪水
+select depart,sum(salary) from emp
+group by depart;
+
+3、查询总薪水排名第二的部门
+select depart from emp
+group by depart
+order by sum(salary) desc limit 1,1;
+
+4、查询姓名重复的员工信息
+select * from emp
+group by name
+having count(name)>1;
+ 
+5、查询各部门薪水大于10000的男性员工的平均薪水
+select depart,avg(salary) from emp
+where salary>10000 and sex=1
+group by depart;
+
+
+
+
