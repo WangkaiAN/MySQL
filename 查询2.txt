@@ -1,0 +1,387 @@
+现在有员工表、部门表和薪资表。部门表depart的字段有depart_id， name；
+员工表 staff 的字段有 staff_id， name， age， depart_id；薪资表salary 的字段有 salary_id，
+staff_id，salary，month。
+
+create database staff;
+use staff;
+create table depart(
+	depart_id int, 
+	name varchar(20)
+);
+create table staff(
+	staff_id int, 
+	name varchar(20), 
+	age int,
+	depart_id int
+);
+create table salary(
+	salary_id int,
+	staff_id int,
+	salary decimal(7,2),
+	month datetime
+);
+insert into depart values
+(1,'开发'),
+(2,'测试'),
+(3,'运维');
+
+insert into staff values
+(101,'小李',21,2),
+(102,'小张',22,1),
+(103,'小王',23,3);
+
+insert into salary values
+(1001,101,9000,'2016-09-09 00:00:00'),
+(1002,102,10000,'2017-10-10 00:00:00'),
+(1003,103,9500,'2015-01-01 00:00:00');
+
+（问题a）：求每个部门'2016-09'月份的部门薪水总额
+select depart.name,sum(salary) from salary,depart,staff
+where month between '2016-09-01 00:00:00' and'2016-09-30 00:00:00'
+and depart.depart_id=staff.depart_id and staff.staff_id=salary.staff_id
+group by depart.depart_id;
+
+（问题b）：求每个部门的部门人数，要求输出部门名称和人数
+
+select depart.name,count(*) from depart,staff
+where depart.depart_id=staff.depart_id 
+group by depart.depart_id;
+
+（问题c）：求公司每个部门的月支出薪资数，要求输出月份和本月薪资总数
+select salary.month,sum(salary) from salary,depart,staff
+where depart.depart_id=staff.depart_id 
+and staff.staff_id=salary.staff_id
+group by depart.depart_id;
+
+有两个表分别如下：
+表A(varchar(32) name， int grade)
+数据：zhangshan 80， lisi 60， wangwu 84
+表B(varchar(32) name， int age)
+数据：zhangshan 26， lisi 24， wangwu 26， wutian 26
+写SQL语句得到如下查询结果：
+create table A(
+	name varchar(32),
+	grade int 
+);
+insert into A values
+('zhangshan',80),
+('lisi',60),
+('wangwu',84);
+
+create table B(
+	name varchar(32),
+	age int 
+);
+insert into B values
+('zhangshan',26),
+('lisi',24),
+('wangwu',26),
+('wutian',26);
+select B.name,grade,age
+from B left join A 
+on B.name=A.name;
+
+| NAME   | GRADE | AGE |
+| zhangshan | 80  | 26  |
+| lisi   | 60  | 24  |
+| wangwu  | 84  | 26  |
+| wutian  | null | 26  |
+
+create table salary(
+	salary_id int,
+	staff_id int,
+	salary decimal(7,2),
+	month datetime
+);
+insert into salary values
+(1001,101,9000,'2016-09-09 00:00:00'),
+(1002,102,10000,'2017-10-10 00:00:00'),
+(1003,103,9500,'2015-01-01 00:00:00');
+编写一个SQL查询，获取Employee表中第二高的薪水（Salary）【陌陌科技2020届校招笔试题】
+select salary from salary
+order by salary desc
+limit 1 offset 1;
+如果不存在第二高的薪水，那么查询应该返回null。
+delete from salary where staff_id in (102,103);
+
+
+已知T1和T2的字段定义完全相同，T1有5条不同数据，
+T2有5条不同数据，其中T1有2条数据存在表T2中，
+使用UNION语句查询这些数据，要求重复数据不出现
+create table T1(
+	id int 
+);
+insert into T1 values
+(101),
+(102),
+(103),
+(104),
+(105);
+
+create table T2(
+	id int 
+);
+insert into T1 values
+(101),
+(102),
+(106),
+(107),
+(108);
+
+select id from T1
+union
+select id from T2;
+
+select id from T1
+union all
+select id from T2;
+
+有一个图书管理系统，包含学生和图书信息，且图书可以进行分类，
+学生可以在一个时间范围内借阅图书，并在这个时间范围内归还图书。表和表关系如下：\
+
+CREATE DATABASE ebook ;
+
+USE ebook;
+
+
+
+-- ----------------------------
+
+-- Table structure for category
+
+-- ----------------------------
+
+DROP TABLE IF EXISTS category;
+
+CREATE TABLE category (
+
+ id int(11) PRIMARY KEY AUTO_INCREMENT,
+
+ name varchar(20)
+
+);
+
+
+
+-- ----------------------------
+
+-- Records of category
+
+-- ----------------------------
+
+INSERT INTO category VALUES (1, '历史');
+
+INSERT INTO category VALUES (2, '艺术');
+
+INSERT INTO category VALUES (3, '计算机');
+
+INSERT INTO category VALUES (4, '数学');
+
+INSERT INTO category VALUES (5, '小说');
+
+
+
+-- ----------------------------
+
+-- Table structure for student
+
+-- ----------------------------
+
+DROP TABLE IF EXISTS student;
+
+CREATE TABLE student (
+
+ id int(11) PRIMARY KEY AUTO_INCREMENT,
+
+ name varchar(20)
+
+);
+
+
+
+-- ----------------------------
+
+-- Records of student
+
+-- ----------------------------
+
+INSERT INTO student VALUES (1, '王昭君');
+
+INSERT INTO student VALUES (2, '李白');
+
+INSERT INTO student VALUES (3, '貂蝉');
+
+INSERT INTO student VALUES (4, '小乔');
+
+INSERT INTO student VALUES (5, '韩信');
+
+
+
+-- ----------------------------
+
+-- Table structure for book
+
+-- ----------------------------
+
+DROP TABLE IF EXISTS book;
+
+CREATE TABLE book (
+
+ id int(11) PRIMARY KEY AUTO_INCREMENT,
+
+ name varchar(20),
+
+ author varchar(20),
+
+ price decimal(10, 2),
+
+ category_id int(11),
+
+ CONSTRAINT fk_book_category_id FOREIGN KEY (category_id) REFERENCES category (id)
+
+);
+
+
+
+-- ----------------------------
+
+-- Records of book
+
+-- ----------------------------
+
+INSERT INTO book VALUES (1, '深入理解Java虚拟机', '周志明', 57.90, 3);
+
+INSERT INTO book VALUES (2, '西游记', '吴承恩', 30.68, 5);
+
+INSERT INTO book VALUES (3, '儒林外史', '吴敬梓', 18.80, 5);
+
+INSERT INTO book VALUES (4, '聊斋志异', '蒲松龄', 21.00, 5);
+
+INSERT INTO book VALUES (5, '史记', '司马迁', 278.20, 1);
+
+INSERT INTO book VALUES (6, '资治通鉴', '司马光', 524.00, 1);
+
+INSERT INTO book VALUES (7, 'Java核心技术 卷I：基础知识', 'Cay S. Horstmann', 92.50, 3);
+
+INSERT INTO book VALUES (8, 'Java核心技术卷II：高级特性', 'Cay S. Horstmann', 111.20, 3);
+
+INSERT INTO book VALUES (9, 'Java多线程编程核心技术', '高洪岩', 47.50, 3);
+
+INSERT INTO book VALUES (10, '诗经', '孔子', 22.00, 2);
+
+INSERT INTO book VALUES (11, '唐诗三百首', '蘅塘居士', 49.30, 2);
+
+INSERT INTO book VALUES (12, '唐诗三百首', '蘅塘居士', 55.00, 2);
+
+INSERT INTO book VALUES (13, '西游记', '吴承恩', 47.50, 5);
+
+INSERT INTO book VALUES (14, '唐诗三百首', '蘅塘居士', 56.50, 2);
+
+
+
+-- ----------------------------
+
+-- Table structure for borrow_info
+
+-- ----------------------------
+
+DROP TABLE IF EXISTS borrow_info;
+
+CREATE TABLE borrow_info (
+
+ id int(11) PRIMARY KEY AUTO_INCREMENT,
+
+ book_id int(11),
+
+ student_id int(11),
+
+ start_time timestamp null,
+
+ end_time timestamp null,
+
+ CONSTRAINT fk_borrow_info_book_id FOREIGN KEY (book_id) REFERENCES book (id),
+
+ CONSTRAINT fk_borrow_info_student_id FOREIGN KEY (student_id) REFERENCES student (id)
+
+);
+
+
+
+-- ----------------------------
+
+-- Records of borrow_info
+
+-- ----------------------------
+
+INSERT INTO borrow_info VALUES (1, 1, 1, '2018-11-07 18:50:43', '2018-12-07 18:51:01');
+
+INSERT INTO borrow_info VALUES (2, 7, 1, '2019-07-10 10:21:00', '2019-09-10 10:21:00');
+
+INSERT INTO borrow_info VALUES (3, 8, 1, '2019-09-10 10:21:00', '2019-10-10 10:21:00');
+
+INSERT INTO borrow_info VALUES (4, 2, 2, '2019-03-02 16:37:00', '2019-04-02 16:37:00');
+
+INSERT INTO borrow_info VALUES (5, 4, 2, '2019-03-12 14:25:00', '2019-04-12 14:25:00');
+
+INSERT INTO borrow_info VALUES (6, 10, 2, '2019-07-13 16:21:00', '2019-10-13 16:21:00');
+
+INSERT INTO borrow_info VALUES (7, 11, 2, '2019-06-09 09:40:00', '2019-07-09 09:40:00');
+
+INSERT INTO borrow_info VALUES (8, 13, 2, '2019-01-03 15:11:00', '2019-04-03 15:11:00');
+
+INSERT INTO borrow_info VALUES (9, 7, 3, '2019-05-15 13:13:00', '2019-06-15 13:13:00');
+
+INSERT INTO borrow_info VALUES (10, 8, 3, '2019-04-27 13:53:00', '2019-05-27 13:53:00');
+
+INSERT INTO borrow_info VALUES (11, 9, 3, '2019-06-01 11:32:00', '2019-07-01 11:32:00');
+
+INSERT INTO borrow_info VALUES (12, 3, 4, '2019-07-01 09:40:00', '2019-08-01 09:40:00');
+
+INSERT INTO borrow_info VALUES (13, 4, 4, '2019-06-19 11:40:00', '2019-07-19 11:40:00');
+
+INSERT INTO borrow_info VALUES (14, 5, 4, '2019-06-25 09:23:00', '2019-09-25 09:23:00');
+
+INSERT INTO borrow_info VALUES (15, 10, 4, '2019-08-27 15:30:00', '2019-09-27 15:30:00');
+
+INSERT INTO borrow_info VALUES (16, 5, 5, '2019-01-23 14:20:00', '2019-04-23 14:20:00');
+
+INSERT INTO borrow_info VALUES (17, 6, 5, '2019-03-09 10:45:00', '2019-04-09 10:45:00');
+
+INSERT INTO borrow_info VALUES (18, 10, 5, '2019-06-17 11:32:00', '2019-09-17 11:32:00');
+
+
+1. 新增貂蝉同学的借阅记录：诗经，从2019年9月25日17:50到2019年10月25日17:50
+
+select id from student
+where name='貂蝉';
+select id  book_id from book
+where name='诗经';
+insert into borrow_info values(null,10,3,'2019-09-25 17:50:00', '2019-10-25 17:50:00');
+
+
+2. 查询计算机分类下的图书借阅信息
+select * from borrow_info 
+where book_id in(select id from book
+where category_id=(select id from category
+where name ='计算机'));
+
+3. 修改图书《深入理解Java虚拟机》的价格为61.20
+update book set price=61.20
+where name='深入理解Java虚拟机';
+
+4. 删除id最大的一条借阅记录
+
+
+insert into borrow_info2 select * from borrow_info where id=(select max(id) from borrow_info);
+
+delete from borrow_info 
+where id=(
+		select max(id) from borrow_info );
+
+delete from borrow_info
+order by id desc
+limit 1;
+
+select max(id) from borrow_info;
+where id=max(id);
+
